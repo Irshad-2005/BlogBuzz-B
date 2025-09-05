@@ -1,1 +1,1 @@
-/* setup project and initialize folder structure
+* setup project and initialize folder structure
