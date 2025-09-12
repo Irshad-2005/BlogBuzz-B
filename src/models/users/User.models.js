@@ -55,7 +55,7 @@ const userSchema = new mongoose.Schema({
     noficationType:{
         email:{
             type:String,
-            required:true,
+            required:false,
         }
     },
     gender:{
