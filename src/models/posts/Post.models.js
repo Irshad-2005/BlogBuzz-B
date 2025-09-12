@@ -7,7 +7,7 @@ const postSchema = new mongoose.Schema({
     },
     image : {
         type:String,
-        required:true
+        default:""
     },
     claps:
     {
@@ -28,7 +28,8 @@ const postSchema = new mongoose.Schema({
     },
     auther:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"User"
+        ref:"User",
+        required:true
     },
     category:{
         type:mongoose.Schema.Types.ObjectId,

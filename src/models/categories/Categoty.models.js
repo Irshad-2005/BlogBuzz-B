@@ -15,10 +15,10 @@ const categorySchema = new Schema({
         type:Number,
         default:0
     },
-    post: {
+    posts: [{
         type:Schema.Types.ObjectId,
         ref:"Post"
-    }
+    }]
 },
 {
     timestamps:true

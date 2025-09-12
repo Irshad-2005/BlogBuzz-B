@@ -21,7 +21,7 @@ exports.register = asyncHandlers( async(req,resp,next)=>
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password,salt);
     
-    const newUser =  new User.create({username,password:hashPassword,email});
+    const newUser = User.create({username,password:hashPassword,email});
 
     resp.json({
         status:"success",

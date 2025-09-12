@@ -4,6 +4,7 @@ const userRouter = require("./routes/users/user.route");
 const connectDB = require("./db/connectDb");
 const { notFound, globalErrorHandler } = require("./middlewares/globalErrorHanlder");
 const categoryRouter = require("./routes/categories/category.route");
+const postRouter = require("./routes/posts/post.route");
 //! configuration are environment file 
 dotenv.config();
 const app = express();
@@ -17,7 +18,8 @@ app.use(express.json());
 app.use("/api/v1/users",userRouter);
 //? define are categories router
 app.use("/api/v1/categories",categoryRouter)
-
+//? define are post router
+app.use("/api/v1/posts",postRouter);
 
 //! Not Found Error
 app.use(notFound);
