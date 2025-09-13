@@ -3,8 +3,10 @@ const Post = require("../../models/posts/Post.models");
 const User = require("../../models/users/User.models");
 const Category = require("../../models/categories/Categoty.models");
 
-
-exports.createPost = asyncHandler(async(req,resp)=>
+//@desc create post
+//route POST/api/v1/posts
+//access private
+exports.createPost = asyncHandler(async(req,resp,next)=>
 {
     //get the title and content or categoryId from req.body
     //if check post are exist or not
@@ -19,7 +21,9 @@ exports.createPost = asyncHandler(async(req,resp)=>
     //console.log(post)
     if(post)
     {
-        throw new Error("post are already exist");
+        const error = new Error("post are already exist");
+        next(error)
+        return;
     }
     const newPost = await Post.create({title,content,auther:req?.userAuth?._id});
 
@@ -35,6 +39,9 @@ exports.createPost = asyncHandler(async(req,resp)=>
     });
 });
 
+//@desc fetching all  post
+//route GET/api/v1/posts
+//access private
 exports.getAllPosts = asyncHandler(async(req,resp)=>
 {
     //get the all post from db
@@ -47,15 +54,58 @@ exports.getAllPosts = asyncHandler(async(req,resp)=>
     });
 });
 
-exports.getPost = asyncHandler(async(req,resp)=>{
+//@desc fetch single  post
+//route GET/api/v1/posts/:postId
+//access private
+exports.getPost = asyncHandler(async(req,resp,next)=>{
     //get the postId from req.params
     //find the post in db
     //return the response
     const {postId} = req.params;
     const post = await Post.findById(postId);
+    if(!post)
+    {
+        const err = new Error("Post are not exist");
+        next(err);
+        return;
+    }
     resp.status(200).json({
         status:"success",
         message:"fetch post successfuly",
         post
+    });   
+});
+
+//@desc delete post
+//route DELETE/api/v1/posts/:postId
+//access private
+exports.deletePost = asyncHandler(async(req,resp,next)=>
+{
+    const {postId} = req.params;
+
+    await Post.findByIdAndDelete(postId);
+
+    resp.status(200).json({
+        status:"success",
+        message:"post deleted successfully"
+    });
+});
+
+//@desc update post
+//route PATCH/api/v1/posts/:postId
+//access private
+exports.updatePost = asyncHandler(async(req,resp,next)=>
+{
+    //get the postId and titile or content
+    //update the post
+    //return resp
+    const{postId}  =req.params;
+    const{title,content} = req.body;
+
+    const updatedPost = await Post.findByIdAndUpdate(postId,{title,content},{new:true});
+    resp.status(200).json({
+        status:"success",
+        message:"post updated successfully",
+        updatedPost
     });
 });
