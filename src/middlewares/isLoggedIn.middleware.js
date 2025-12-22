@@ -7,13 +7,15 @@ const isLoggedIn = (req,resp,next)=>
     //if token are verify unsuccessfully then send error
     console.log("isLoggedIn middleware execute");
     const token = req?.headers?.authorization?.split(" ")[1];
-    //console.log(token);
+    console.log("Token :",req?.headers.authorization);
+    //console.log("Req : ",req.route)
 
     jwt.verify(token,process.env.JWT_SECRET_KEY,async(error,decoded)=>
     {
         if(error)
         {
             const err = new Error(error.message);
+            //console.log("ERRROR : ", error);
             next(err);
         }
         else{

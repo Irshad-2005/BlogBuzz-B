@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
 
@@ -55,12 +56,12 @@ const userSchema = new mongoose.Schema({
     noficationType:{
         email:{
             type:String,
-            required:false,
+            default:false
         }
     },
     gender:{
-        type:"String",
-        enum:["male","female","other"],
+        type:String,
+        default:null
     },
     profileViewers:[
         {
@@ -93,22 +94,51 @@ const userSchema = new mongoose.Schema({
         ref:"User"
     }],
     passwordResetToken:{
-        type:String
+        type:String,
+        default:null
     },
-    passwordResetExpires:
-    {
-        type:Date
+    passwordResetExpires:{
+        type:Date,
+        default:null
+
     },
     accountVerificationToken:
     {
-        type:"String"
+        type:String,
+        default:null
     },
     accountVerificationExpires:{
-        type:Date
+        type:Date,
+        default:null
     }
 },
 {
-    timestamps:true
+    timestamps:true,
+    toObject:{
+        virtuals:true
+    },
+    toJSON:{
+        virtuals:true
+    }
 });
+
+userSchema.methods.generatePasswordForgetToken =  function(){
+    const passwordResetToken  = crypto.randomBytes(20).toString("hex");
+    console.log("passwordResetToken : ", passwordResetToken);
+    const hashToken = crypto.createHash("sha256").update(passwordResetToken).digest("hex");
+    this.passwordResetToken = hashToken;
+    this.passwordResetExpires = Date.now() + 10*60*1000;
+    return passwordResetToken;
+}
+
+userSchema.methods.generateAccountVerificationToken = function()
+{
+    const accountVerificationToken = crypto.randomBytes(20).toString("hex");
+    console.log("accountVerification token: ",accountVerificationToken);
+    const hashToken = crypto.createHash("sha256").update(accountVerificationToken).digest("hex");
+    this.accountVerificationToken = hashToken;
+    this.accountVerificationExpires = Date.now() + 10*60*1000;
+    return accountVerificationToken;
+}
 
 module.exports = mongoose.model("User",userSchema);

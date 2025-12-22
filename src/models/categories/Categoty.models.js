@@ -21,7 +21,13 @@ const categorySchema = new Schema({
     }]
 },
 {
-    timestamps:true
+    timestamps:true,
+    toObject:{
+        virtuals:true
+    },
+    toJSON:{
+        virtuals:true
+    }
 });
 
 module.exports = model("Category",categorySchema);

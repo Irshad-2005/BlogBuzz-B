@@ -3,6 +3,7 @@ const globalErrorHandler =  (error,req,resp,next)=>
     const message = error?.message;
     const stack  = error?.stack;
     const status = error?.code ? error?.code : "failed"
+    console.log("Internal server error")
     resp.status(500).json({
         status,
         message,

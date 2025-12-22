@@ -16,7 +16,13 @@ const commentSchema = new Schema({
     }
 },
 {
-    timestamps:true
+    timestamps:true,
+    toObject:{
+        virtuals:true
+    },
+    toJSON:{
+        virtuals:true
+    }
 });
 
 module.exports = model("Comment",commentSchema);

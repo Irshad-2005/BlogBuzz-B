@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Comment = require("../../models/comments/Comment.models");
+const Post = require("../../models/posts/Post.models");
 
 //@desc new comment created
 //@route POST/api/v1/comment
@@ -10,15 +11,21 @@ exports.createComment = asyncHandler(async(req,resp,next)=>
     //get user from req.userAuth
     //create comment
     //resp send
-    const {postId} = req.params;
-    const{message} = req.body;
+    const {postId} = req?.params;
+    const{message} = req?.body;
+    console.log("message :",message)
 
     const newComment = await Comment.create({message,auther:req?.userAuth?._id,postId});
-
+    const post = await Post.findById(postId);
+    post.comment.push(newComment);
+    await post.save();
+    console.log("post comment:",post.comment)
+    //console.log("Post : ",post)
     resp.status(200).json({
         status:"success",
         message:"new comment created successfully",
-        newComment
+        newComment,
+        post
     });
 });
 

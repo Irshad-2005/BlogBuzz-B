@@ -14,10 +14,12 @@ const postSchema = new mongoose.Schema({
         type:Number,
         default : 0
     },
-    postViewers:{
-        type:Number,
-        default:0
-    },
+    postViewers:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+        
+        
+    }],
     shares:{
         type:Number,
         default:0
@@ -29,7 +31,7 @@ const postSchema = new mongoose.Schema({
     auther:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
-        required:true
+        require:true
     },
     category:{
         type:mongoose.Schema.Types.ObjectId,
@@ -37,11 +39,17 @@ const postSchema = new mongoose.Schema({
     },
     scheduledPublished:{
         type:Date,
+        default:null
     },
     likes:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     }],
+    dislikes:[{
+        type:mongoose.Schema.Types.ObjectId,   
+        ref:"User"
+    }
+    ],
     comment:[
         {
             type:mongoose.Schema.Types.ObjectId,
@@ -50,7 +58,13 @@ const postSchema = new mongoose.Schema({
     ]
 },
 {
-    timestamps:true
+    timestamps:true,
+    toObject:{
+        virtuals:true
+    },
+    toJson:{
+        virtuals:true
+    }
 });
 
 module.exports = mongoose.model("Post",postSchema);
