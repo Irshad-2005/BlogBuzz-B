@@ -366,22 +366,22 @@ exports.schedulePost = asyncHandler(async(req,resp,next)=>
 //@ access private
 exports.postViewCount = asyncHandler(async(req,res,next)=>
 {
-    const { postId} = req.params;
-    console.log("post-view-count")
-    const post = await Post.findById(postId);
-    const currentUserId = req?.userAuth?._id
-    if(!post)
-    {
-        const error = new Error("post not found");
-        next(error);
-        return;
-    }
-    //console.log(post)
-    const updatedPost = await Post.findByIdAndUpdate(postId,{$addToSet:{postViewers:currentUserId}},{new:true});
-    //console.log("Updated : ",updatedPost)
-    res.json({
+        const { postId} = req.params;
+        const post = await Post.findById(postId);
+        const currentUserId = req?.userAuth?._id
+        const user  = await User.findById(currentUserId)
+        console.log(user)
+        if(!post)
+            {
+             const error = new Error("post not found");
+             next(error);
+                return;
+            }
+        const updatedPost = await Post.findByIdAndUpdate(postId,{$addToSet:{postViewers:currentUserId}},{new:true});
+        console.log("post-view-count updatedPost", post)
+        res.json({
         message:"successfully",
         data : updatedPost
-    })
+    });  
 
 })

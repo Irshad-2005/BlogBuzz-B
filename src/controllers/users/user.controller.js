@@ -456,5 +456,30 @@ exports.verifyAccount = asyncHandler(async(req,resp,next)=>
     });
 });
 
+exports.publicProfile = asyncHandler(async (req,res,next)=>
+{
+    const {userId} = req.params;
 
+    const userInfo = await User.findById(userId).select("username accountLevel profileImage coverImage Bio followers following")
+    .populate({
+        path : "posts",
+        model:"Post",
+        populate : {
+            path:"category",
+            model:"Category"
+        }
+});
+    if(!userInfo)
+    {
+        const err = new Error("user not found!");
+        next(err);
+        return;
+    }
+
+    res.status(200).json({
+        status:"success",
+        message :"public profile successfully fetch..!",
+        userInfo,
+});
+})
 

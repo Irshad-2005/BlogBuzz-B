@@ -1,5 +1,5 @@
 const express = require("express");
-const {register, login,  getProfile, blockUser, unBlockUser, viewOtherProfile, followingUser, unfollowUser, passwordReset, forgetPassword, accountVerification, accountVerificationMail, verifyAccount} = require("../../controllers/users/user.controller");
+const {register, login,  getProfile, blockUser, unBlockUser, viewOtherProfile, followingUser, unfollowUser, passwordReset, forgetPassword, accountVerification, accountVerificationMail, verifyAccount, publicProfile} = require("../../controllers/users/user.controller");
 const isLoggedIn = require("../../middlewares/isLoggedIn.middleware");
 const userRouter = express.Router();
 
@@ -27,4 +27,6 @@ userRouter.route("/password-reset/:passwordResetToken").patch(passwordReset);
 userRouter.route("/account-verification-mail").patch(isLoggedIn,accountVerificationMail);
 //! verify account route
 userRouter.route("/verify-account/:accountVerificationToken").patch(isLoggedIn,verifyAccount);
+//! public profile route
+userRouter.route("/public-profile/:userId").get(isLoggedIn,publicProfile);
 module.exports = userRouter;

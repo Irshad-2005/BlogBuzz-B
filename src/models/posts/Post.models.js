@@ -16,9 +16,7 @@ const postSchema = new mongoose.Schema({
     },
     postViewers:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"User"
-        
-        
+        ref:"User" 
     }],
     shares:{
         type:Number,
