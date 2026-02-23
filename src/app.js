@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors({
     origin:'https://localhost:3000'
 }))
-
+require("dotenv").config({path:"./.env"});
 //? define are user router
 app.use("/api/v1/users",userRouter);
 //? define are categories router
