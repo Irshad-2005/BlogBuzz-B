@@ -1,5 +1,5 @@
 const nodeMailer = require("nodemailer");
-
+require("dotenv").config({path:"./.env"});
 
 
 const sendEmail = async(to,passwordResetToken)=>
